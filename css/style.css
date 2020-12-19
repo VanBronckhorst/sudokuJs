@@ -2,7 +2,7 @@ body {
     margin: 0px;
     height: 100vh;
     font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;;
-    background-color: #18bc9c;
+    /* background-color: #18bc9c; */
 }
 
 .full-SVG {
@@ -193,3 +193,41 @@ body {
 }
 
 .close:hover { background: #00d9ff; }
+
+.cell {
+    position: relative;
+    float: left;
+    border: 0.5px #CCC solid;
+}
+
+.white-cell {
+    background-color: #FFF;
+}
+
+.grey-cell {
+    background-color: #EEE;
+}
+
+.wall-left {
+    border-left: 1px black solid;
+}
+
+.wall-right {
+    border-right: 1px black solid;
+}
+
+.wall-top {
+    border-top: 1px black solid;
+}
+
+.wall-bottom {
+    border-bottom: 1px black solid;
+}
+
+.board {
+    border: 1px black solid;
+}
+
+.focus-cell {
+    background-color: rgb(214, 239, 255);
+}
