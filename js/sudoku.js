@@ -46,7 +46,52 @@ function permutate(s1, s2) {
 }
 
 function solveGrid(gridStr) {
-    const gridVals = _gridValues(gridStr);
+    return searchSolution(parseGrid(gridStr));
+}
+
+function searchSolution(solution) {
+    // impossible puzzle?
+    console.log("Searching solution:", solution);
+    if (solution == false) {
+        return false;
+    }
+
+    // is it already solved?
+    if (_isSolved(solution)) {
+        return solution;
+    }
+
+
+    let minVal = Infinity;
+    let minCell = "";
+    // find the not assinged cell with least possible values.
+    for (const cell of K_SUDOKU.allCells) {
+        const numSols = solution[cell].length;
+        if (numSols > 1 && numSols < minVal) {
+            minVal = numSols;
+            minCell = cell;
+        }
+    }
+
+    // Now try assigning all possible values to that cell, and recurse.
+    for (const possibleVal of solution[minCell]) {
+        let newSolution = structuredClone(solution);
+        newSolution = assignValue(newSolution, minCell, possibleVal);
+
+        console.log("Trying assignment: ", minCell, possibleVal, newSolution);
+
+        newSolution = searchSolution(newSolution);
+        if (newSolution !== false) {
+            return newSolution;
+        }
+    }
+
+    // All assignments failed, impossible puzzle. 
+    return false;
+}
+
+function parseGrid(gridStr) {
+    const gridVals = gridValues(gridStr);
     let solution = {};
     K_SUDOKU.allCells.forEach((c) => (solution[c] = "123456789"));
 
@@ -121,7 +166,7 @@ function eliminate(solution, key, val) {
     return solution;
 }
 
-function _gridValues(gridStr) {
+function gridValues(gridStr) {
     let i = 0;
     let gridValues = {};
     for (c of gridStr) {
@@ -138,4 +183,14 @@ function _gridValues(gridStr) {
 
     console.error("Bad GridValue");
     return null;
+}
+
+function _isSolved(parsedGrid) {
+    for (const cell of K_SUDOKU.allCells) {
+        if (parsedGrid[cell].length !== 1) {
+            return false;
+        }
+    }
+
+    return true;
 }

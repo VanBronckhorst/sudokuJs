@@ -35,33 +35,76 @@ function createGrid(el) {
     };
 }
 
+function gridStringFromCells(boardObj) {
+    let res = "";
+    for (let r of "ABCDEFGHI") {
+        for (let c of "123456789") {
+            let cell = boardObj[r+c];
+            if (cell.pll_value.textContent) {
+                res += cell.pll_value.textContent;
+            } else if (cell.pll_input.value.length > 0){
+                res += cell.pll_input.value;
+            } else {
+                res += ".";
+            }
+        }
+    }
+
+    return res;
+}
+
 
 function createCell() {
     let cell = document.createElement("div");
-    cell.style = "width:49px; height:49px";
     cell.classList.add("cell");
     let hints = document.createElement("div");
     let value = document.createElement("div");
+    let input = document.createElement("input");
+    //input.type = "number";
 
     value.classList.add("cell-value");
+    value.classList.add("invisible");
     hints.classList.add("cell-hints");
     hints.classList.add("invisible");
+    input.classList.add("cell-input");
+    input.classList.add("invisible");
+
+    let val = document.createElement("span");
+    val.classList.add("span-value");
+    value.appendChild(val);
 
     cell.appendChild(hints);
     cell.appendChild(value);
+    cell.appendChild(input);
+    cell.pll_value = value;
+    cell.pll_input = input;
+    cell.pll_val_span = val;
     return cell;
 }
 
 function setValue(cell, value) {
     let valueContainer = cell.querySelector(".cell-value");
     let hintContainer = cell.querySelector(".cell-hints");
+    let inputContainer = cell.querySelector(".cell-input");
     hintContainer.classList.add("invisible");
+    inputContainer.classList.add("invisible");
     valueContainer.classList.remove("invisible");
 
-    let val = document.createElement("span");
-    val.classList.add("span-value");
-    val.textContent = value;
-    valueContainer.appendChild(val);
+    cell.pll_val_span.textContent = value;
+}
+
+function updateInputStyle(cell, inputStyleKeyboard) {
+    let valueContainer = cell.querySelector(".cell-value");
+    let inputContainer = cell.querySelector(".cell-input");
+    if (valueContainer.textContent.length === 0) {
+        if (inputStyleKeyboard) {
+            inputContainer.classList.remove("invisible");
+        } else {
+            inputContainer.classList.add("invisible");
+        }
+    } else {
+        inputContainer.classList.add("invisible");
+    }
 }
 
 function setHints(cell, hints) {
