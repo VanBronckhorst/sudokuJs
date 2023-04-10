@@ -93,6 +93,24 @@ function setValue(cell, value) {
     cell.pll_val_span.textContent = value;
 }
 
+function resetCell(cell, inputStyleKeyboard) {
+    let valueContainer = cell.querySelector(".cell-value");
+    let hintContainer = cell.querySelector(".cell-hints");
+    let inputContainer = cell.querySelector(".cell-input");
+    hintContainer.classList.add("invisible");
+    inputContainer.classList.remove("invisible");
+    valueContainer.classList.add("invisible");
+    cell.classList.remove('conflict');
+
+    cell.pll_val_span.textContent = "";
+    cell.pll_input.value = "";
+    updateInputStyle(cell, inputStyleKeyboard);
+}
+
+function setConflict(cell) {
+    cell.classList.add('conflict');
+}
+
 function updateInputStyle(cell, inputStyleKeyboard) {
     let valueContainer = cell.querySelector(".cell-value");
     let inputContainer = cell.querySelector(".cell-input");
@@ -112,6 +130,9 @@ function setHints(cell, hints) {
     let hintContainer = cell.querySelector(".cell-hints");
     hintContainer.classList.remove("invisible");
     valueContainer.classList.add("invisible");
+    while (hintContainer.firstChild) {
+        hintContainer.removeChild(hintContainer.firstChild);
+    }
 
     for (value of hints) {
         let val = document.createElement("span");
